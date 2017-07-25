@@ -82,9 +82,11 @@ while True:
     cv2.imshow('Frame', frame)
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     cv2.imshow('Gray', gray)
-    faceCam = cascadeFace.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30,30))
+    faceCam = cascadeFace.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(5,5))
+    
     for (x,y,w,h) in faceCam:
-        mat = cv2.matchTemplate(gray, cropped, cv2.TM_CCOEFF_NORMED)
+        croppedResized = cv2.resize(cropped, (w,h), interpolation=cv2.INTER_CUBIC)
+        mat = cv2.matchTemplate(gray, croppedResized, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mat)
         top_left = max_loc
         bottom_right = (top_left[0] + w, top_left[1] + h + 30)
