@@ -7,7 +7,7 @@ To run from command prompt, use:
 ```
 FaceTemplateMatching.py <optionalArg>
 ```
-while pointing to your root directory, where the optionalArg is the path to your template image. If left blank, it will default to a file named "template.png" in your root directory. Problems arise when no such file exists or no path is given.
+while pointing to your root directory, where the optionalArg is the path to your template image. If left blank, it will default to a file named "template.png" in your root directory. If no template exists, you will be prompted to capture one.
 
 If you provide a template file with more than one face in it, only one will be selected and checked against, and the rest will be discarded.
 
