@@ -9,6 +9,5 @@ FaceTemplateMatching.py <optionalArg>
 ```
 while pointing to your root directory, where the optionalArg is the path to your template image. If left blank, it will default to a file named "template.png" in your root directory. Problems arise when no such file exists or no path is given.
 
-If you provide a template file with more than one face in it, only one will be selected and checked against, and the rest will be discard.
+If you provide a template file with more than one face in it, only one will be selected and checked against, and the rest will be discarded.
 
-If you are taking your template image from the webcam directly with tools like Snipping Tool (Windows), try sit the same distance away from the webcam as you were when you took the image, or else accuracy in the template match will drop. 
