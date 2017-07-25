@@ -52,9 +52,8 @@ class FrameGrabber:
         self.vidStream.release()
         self.stopped = True
         
-fps = FPSCounter().start()
-vidStream = FrameGrabber(src=0).start()
 
+vidStream = FrameGrabber(src=0).start()
 cascadeFace = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
 
 if (len(sys.argv) == 1):
@@ -62,30 +61,45 @@ if (len(sys.argv) == 1):
 else:
     imgPath = sys.argv[1]
     template = cv2.imread(imgPath, 0)
+
+if template is None:
+    #If no template file exists, open video stream to capture template
+    while (True):
+        tempFrame = vidStream.read()
+        cv2.imshow('Template Capture', tempFrame)
+        template = cv2.cvtColor(tempFrame, cv2.COLOR_BGR2GRAY)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.imwrite("template.png", template)
+            break
     
+
+
 w,h = template.shape[::-1]
 
 #Reducing the template image to crop out the face
-face = cascadeFace.detectMultiScale(template, scaleFactor=1.3, minNeighbors=5, minSize=(30,30))
+face = cascadeFace.detectMultiScale(template, scaleFactor=1.3, minNeighbors=5, minSize=(25,25))
 padding = 30
 for (x,y,w,h) in face:
     cv2.rectangle(template, (x,y-30), (x + w, y + h+20), (0,255,0), 2)
     cropped = template[y-30:y+h+20, x:x+w]
-
+    
 
 cv2.imshow('Template', template)
 cv2.imshow('Cropped', cropped)
 cv2.waitKey(1)
+
+fps = FPSCounter().start()
 
 while True:
     frame = vidStream.read()
     cv2.imshow('Frame', frame)
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     cv2.imshow('Gray', gray)
-    faceCam = cascadeFace.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(5,5))
+    faceCam = cascadeFace.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(25,25))
     
     for (x,y,w,h) in faceCam:
-        croppedResized = cv2.resize(cropped, (w,h), interpolation=cv2.INTER_CUBIC)
+        croppedResized = cv2.resize(cropped, (w,h), interpolation=cv2.INTER_LINEAR)
+        cv2.imshow('asd', croppedResized)
         mat = cv2.matchTemplate(gray, croppedResized, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mat)
         top_left = max_loc
