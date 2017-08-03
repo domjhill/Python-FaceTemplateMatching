@@ -72,8 +72,6 @@ if template is None:
             cv2.imwrite("template.png", template)
             break
     
-
-
 w,h = template.shape[::-1]
 
 #Reducing the template image to crop out the face
@@ -99,7 +97,7 @@ while True:
     
     for (x,y,w,h) in faceCam:
         croppedResized = cv2.resize(cropped, (w,h), interpolation=cv2.INTER_LINEAR)
-        cv2.imshow('asd', croppedResized)
+        cv2.imshow('Resized', croppedResized)
         mat = cv2.matchTemplate(gray, croppedResized, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mat)
         top_left = max_loc
